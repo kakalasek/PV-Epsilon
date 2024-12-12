@@ -9,7 +9,23 @@ import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import static com.FileConverter.ConvertCommand.IOERROR;
+import static com.FileConverter.ConvertCommand.SUCCESS;
+
 public class EventLoop implements Runnable{
+
+    private void showTasksStatus(FileConverter fileConverter) throws ExecutionException, InterruptedException {
+        for (CompletableFuture<Integer> task : fileConverter.getInitiatedFileConversions()){
+            if (task.isDone()) {
+                switch (task.get()){
+                    case SUCCESS -> System.out.println("Successfully Converted");
+                    case IOERROR -> System.out.println("An IOError Has Occurred");
+                }
+            } else {
+                System.out.println("Not done yet");
+            }
+        }
+    }
 
     @Override
     public void run() {
@@ -39,34 +55,23 @@ public class EventLoop implements Runnable{
                 }
 
                 switch (Integer.parseInt(userSelect)) {
-                    case 1:
+                    case 1 -> {
                         System.out.println("Enter a valid file URL for your CSV file");
                         file1 = sc.nextLine();
                         System.out.println("Enter a valid file URL for your output file");
                         file2 = sc.nextLine();
                         fileConverter.executeCommand(new ConvertFromCsvToJsonCommand(), file1, file2);
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         System.out.println("Enter a valid file URL for your JSON file");
                         file1 = sc.nextLine();
                         System.out.println("Enter a valid file URL for your output file");
                         file2 = sc.nextLine();
                         fileConverter.executeCommand(new ConvertFromJsonToCsvCommand(), file1, file2);
-                        break;
-                    case 3:
-                        for (CompletableFuture<Integer> task : fileConverter.getInitiatedFileConversions()){
-                            if (task.isDone()) {
-                                System.out.println(task.get());
-                            } else {
-                                System.out.println("Not done yet");
-                            }
-                        }
-                        break;
-                    case 4:
-                        anotherOne = false;
-                        break;
-                    default:
-                        throw new InputMismatchException();
+                    }
+                    case 3 -> showTasksStatus(fileConverter);
+                    case 4 -> anotherOne = false;
+                    default -> throw new InputMismatchException();
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Your pick bust be a number in this range: 1-4!");
