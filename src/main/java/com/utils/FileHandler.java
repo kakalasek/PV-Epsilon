@@ -1,13 +1,14 @@
 package com.utils;
 
 import com.EventLoop.Settings;
+import com.Exceptions.CantLoadSettingsException;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class FileHandler {
 
-    public static ArrayList<String[]> readCsv(String filePath) throws IOException {
+    public static ArrayList<String[]> readCsv(String filePath) throws CantLoadSettingsException, IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
             ArrayList<String[]> outputList = new ArrayList<>();
             String newLine;

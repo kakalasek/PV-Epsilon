@@ -1,5 +1,6 @@
 package com.EventLoop;
 
+import com.Exceptions.CantLoadSettingsException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,12 +12,16 @@ public class Settings {
     @JsonProperty private String csvDelimiter;
     private static Settings instance = null;
 
-    public static Settings loadSettings() throws IOException {
+    public static Settings loadSettings() throws CantLoadSettingsException {
         if(instance == null){
-            ObjectMapper objectMapper = new ObjectMapper();
-            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-            URL settingsFile = classLoader.getResource("settings.json");
-            instance = objectMapper.readValue(settingsFile, Settings.class);
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+                URL settingsFile = classLoader.getResource("settings.json");
+                instance = objectMapper.readValue(settingsFile, Settings.class);
+            } catch (IOException e){
+                throw new CantLoadSettingsException("The program was unable to load the settings file", e);
+            }
         }
         return instance;
     }

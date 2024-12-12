@@ -1,5 +1,6 @@
 package com.FileConverter;
 
+import com.Exceptions.CantLoadSettingsException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.utils.FileHandler;
 
@@ -54,6 +55,8 @@ public class ConvertFromCsvToJsonCommand implements ConvertCommand {
         } catch (IOException e){
             e.printStackTrace();
             return IOERROR;
+        } catch (CantLoadSettingsException e) {
+            throw new RuntimeException(e);
         }
         return SUCCESS;
     }
