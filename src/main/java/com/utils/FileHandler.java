@@ -1,4 +1,6 @@
-package com.FileConverter;
+package com.utils;
+
+import com.EventLoop.Settings;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -9,10 +11,11 @@ public class FileHandler {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
             ArrayList<String[]> outputList = new ArrayList<>();
             String newLine;
-            String splitter = ",";
+            Settings settings = Settings.loadSettings();
+            String delimiter = settings.getCsvDelimiter();
 
             while ((newLine = bufferedReader.readLine()) != null) {
-                outputList.add(newLine.split(splitter));
+                outputList.add(newLine.split(delimiter));
             }
 
             return outputList;

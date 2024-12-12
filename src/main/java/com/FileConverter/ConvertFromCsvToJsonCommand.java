@@ -1,6 +1,7 @@
 package com.FileConverter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.utils.FileHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class ConvertFromCsvToJsonCommand implements ConvertCommand {
             FileHandler.writeJson(file2, jsonData);
 
         } catch (IOException e){
+            e.printStackTrace();
             return IOERROR;
         }
         return SUCCESS;
