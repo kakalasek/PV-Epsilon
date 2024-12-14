@@ -1,7 +1,10 @@
 package com.FileConverter;
 
 import com.Exceptions.CantLoadSettingsException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.utils.FileHandler;
 
 import java.io.IOException;
@@ -12,32 +15,24 @@ import java.util.Map;
 
 public class ConvertFromCsvToJsonCommand implements ConvertCommand {
 
-    private Map<String, List<Map<String, String>>> castCsvToMap(List<String[]> csvData){
-        Map<String, List<Map<String, String>>> outputMap = new HashMap<>();
-        outputMap.put("elements", new ArrayList<>());
 
-        List<Map<String, String>> elements = outputMap.get("elements");
-        Map<String, String> currentRecord;
-        String[] csvFields = csvData.getFirst();
-        int numberOfRecords = csvData.size();
-        int numberOfFields = csvFields.length;
-        int recordNumber;
+    private String createJson(ArrayList<String[]> csvData) throws JsonProcessingException {
+
+        String[] fields = csvData.removeFirst();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode arrayNode = objectMapper.createArrayNode();
         int fieldNumber;
 
-
-        for(recordNumber = 1; recordNumber < numberOfRecords; recordNumber++){
-            elements.add(new HashMap<>());
-            currentRecord = elements.get(recordNumber-1);
-
-            for(fieldNumber = 0; fieldNumber < numberOfFields; fieldNumber++){
-                String fieldName = csvFields[fieldNumber];
-                String fieldDataForRecord = csvData.get(recordNumber)[fieldNumber];
-
-                currentRecord.put(fieldName, fieldDataForRecord);
+        for(String[] record : csvData) {
+            ObjectNode objectNode = objectMapper.createObjectNode();
+            for(fieldNumber = 0; fieldNumber < fields.length; fieldNumber++){
+                objectNode.put(fields[fieldNumber], record[fieldNumber]);
             }
+            arrayNode.add(objectNode);
         }
 
-        return outputMap;
+        return objectMapper.writeValueAsString(arrayNode);
     }
 
     @Override
@@ -45,10 +40,7 @@ public class ConvertFromCsvToJsonCommand implements ConvertCommand {
         try {
             ArrayList<String[]> loadedCsvData = FileHandler.readCsv(file1);
 
-            Map<String, List<Map<String, String>>> csvDataInHashMap = castCsvToMap(loadedCsvData);
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonData = objectMapper.writeValueAsString(csvDataInHashMap);
+            String jsonData = createJson(loadedCsvData);
 
             FileHandler.writeJson(file2, jsonData);
 

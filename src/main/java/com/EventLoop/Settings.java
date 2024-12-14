@@ -30,7 +30,7 @@ public class Settings {
         return csvDelimiter;
     }
 
-    public void setCsvDelimiter(String delimiter) {
-        this.csvDelimiter = delimiter;
+    public void setCsvDelimiter(String csvDelimiter) {
+        this.csvDelimiter = csvDelimiter;
     }
 }
