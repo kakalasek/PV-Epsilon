@@ -1,55 +1,59 @@
 package com.FileConverter;
 
 import com.Exceptions.CantLoadSettingsException;
+import com.Exceptions.CsvReadException;
+import com.Exceptions.JsonHandlingException;
+import com.Exceptions.JsonWriteException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.utils.FileHandler;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ConvertFromCsvToJsonCommand implements ConvertCommand {
 
+    /**
+     * This method convert representation of csv data to a json String
+     * @param csvData The data you want to convert
+     * @return The json String created from the csv data
+     * @throws JsonHandlingException Is thrown if any problem occurs during the transition
+     */
+    private String createJson(ArrayList<String[]> csvData) throws JsonHandlingException{
+        try {
+            String[] fields = csvData.removeFirst();
 
-    private String createJson(ArrayList<String[]> csvData) throws JsonProcessingException {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ArrayNode arrayNode = objectMapper.createArrayNode();
+            int fieldNumber;
 
-        String[] fields = csvData.removeFirst();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        ArrayNode arrayNode = objectMapper.createArrayNode();
-        int fieldNumber;
-
-        for(String[] record : csvData) {
-            ObjectNode objectNode = objectMapper.createObjectNode();
-            for(fieldNumber = 0; fieldNumber < fields.length; fieldNumber++){
-                objectNode.put(fields[fieldNumber], record[fieldNumber]);
+            for (String[] record : csvData) {
+                ObjectNode objectNode = objectMapper.createObjectNode();
+                for (fieldNumber = 0; fieldNumber < fields.length; fieldNumber++) {
+                    objectNode.put(fields[fieldNumber], record[fieldNumber]);
+                }
+                arrayNode.add(objectNode);
             }
-            arrayNode.add(objectNode);
-        }
 
-        return objectMapper.writeValueAsString(arrayNode);
+            return objectMapper.writeValueAsString(arrayNode);
+        } catch (JsonProcessingException e){
+            throw new JsonHandlingException("There has been a problem when creating the new json file", e);
+        }
     }
 
     @Override
-    public Integer execute(String file1, String file2) {
+    public String execute(String file1, String file2) {
         try {
             ArrayList<String[]> loadedCsvData = FileHandler.readCsv(file1);
 
             String jsonData = createJson(loadedCsvData);
 
             FileHandler.writeJson(file2, jsonData);
-
-        } catch (IOException e){
-            e.printStackTrace();
-            return IOERROR;
-        } catch (CantLoadSettingsException e) {
-            throw new RuntimeException(e);
+        } catch (JsonHandlingException | CsvReadException | JsonWriteException | CantLoadSettingsException e){
+            return e.getMessage();
         }
-        return SUCCESS;
+
+        return "Successfully converted";
     }
 }

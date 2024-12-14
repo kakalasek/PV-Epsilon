@@ -1,7 +1,7 @@
 package com.utils;
 
 import com.EventLoop.Settings;
-import com.Exceptions.CantLoadSettingsException;
+import com.Exceptions.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -9,9 +9,21 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Special class which offers method to read and write a json or csv file
+ */
 public class FileHandler {
 
-    public static ArrayList<String[]> readCsv(String filePath) throws CantLoadSettingsException, IOException {
+    /**
+     * Reads a csv file.
+     * @param filePath Path to the csv file
+     * @return An ArrayList object with String arrays as its elements. The first String array will contain the field names,
+     * every other String array will represent one record inside the csv file.
+     * @throws CantLoadSettingsException This method need to know which delimiter to use in the csv file. If reading it from
+     * settings does not work, it throws this exception.
+     * @throws CsvReadException Get thrown if there is any problem reading the provided csv file
+     */
+    public static ArrayList<String[]> readCsv(String filePath) throws CantLoadSettingsException, CsvReadException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
             ArrayList<String[]> outputList = new ArrayList<>();
             String newLine;
@@ -23,27 +35,55 @@ public class FileHandler {
             }
 
             return outputList;
+        } catch (IOException e) {
+            throw new CsvReadException("There has been a problem reading the csv file", e);
         }
     }
 
-    public static String readJson(String filePath) throws CantLoadSettingsException, IOException {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+    /**
+     * Reads a json file.
+     * @param filePath Path to the json file
+     * @return A String representation of the json files content
+     * @throws JsonReadException Thrown if there is any problem reading the provided json file
+     */
+    public static String readJson(String filePath) throws JsonReadException{
+        try{
             ObjectMapper objectMapper = new ObjectMapper();
 
-            JsonNode arrayNode = objectMapper.readTree(new File(filePath));
+            JsonNode recordsList = objectMapper.readTree(new File(filePath));
 
-            return arrayNode.toString();
+            return recordsList.toString();
+
+        } catch (IOException e){
+            throw new JsonReadException("There has been a problem reading your json file", e);
         }
     }
 
-    public static void writeJson(String filePath, String inputData) throws IOException{
+    /**
+     * Writes json to a file. Simply writes the provided string
+     * @param filePath The file to write to
+     * @param inputData The data to write
+     * @throws JsonWriteException Is thrown if there is any problem writing to the specified file
+     */
+    public static void writeJson(String filePath, String inputData) throws JsonWriteException {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
-
             bufferedWriter.write(inputData);
+
+        } catch (IOException e){
+            throw new JsonWriteException("There has been a problem writing the json to the file", e);
         }
     }
 
-    public static void writeCsv(String filepath, ArrayList<String[]> inputData) throws IOException, CantLoadSettingsException {
+    /**
+     * Writes csv to a file. Takes care of parsing the data
+     * @param filepath The file to write to
+     * @param inputData The data to write. The ArrayList holds all the csv records represented as String arrays
+     *                  The first ArrayList entry holds the csv field names, other entries hold the csv records
+     * @throws CsvWriteException Is thrown if any problem with writing to the specified file appears
+     * @throws CantLoadSettingsException This method need to know which delimiter to use in the csv file. If reading it from
+     *                                   settings does not work, it throws this exception.
+     */
+    public static void writeCsv(String filepath, ArrayList<String[]> inputData) throws CantLoadSettingsException, CsvWriteException {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath))){
             Settings settings = Settings.loadSettings();
             String delimiter = settings.getCsvDelimiter();
@@ -57,6 +97,8 @@ public class FileHandler {
                 recordAsString = recordAsString + "\n";
                 bufferedWriter.append(recordAsString);
             }
+        } catch (IOException e){
+            throw new CsvWriteException("There has been a problem with writing the csv to the file", e);
         }
     }
 }

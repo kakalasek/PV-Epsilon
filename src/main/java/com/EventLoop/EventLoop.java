@@ -13,8 +13,7 @@ import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static com.FileConverter.ConvertCommand.IOERROR;
-import static com.FileConverter.ConvertCommand.SUCCESS;
+import static com.FileConverter.ConvertCommand.*;
 
 public class EventLoop implements Runnable{
 
@@ -56,18 +55,19 @@ public class EventLoop implements Runnable{
     /**
      * Prints the status of each initiated task to the console
      * @param fileConverter The FileConverter object, which is responsible for the initiated task
-     * @throws ExecutionException
-     * @throws InterruptedException
      */
-    private void showTasksStatus(FileConverter fileConverter) throws ExecutionException, InterruptedException {
-        for (CompletableFuture<Integer> task : fileConverter.getInitiatedFileConversions()){
-            if (task.isDone()) {
-                switch (task.get()){
-                    case SUCCESS -> System.out.println("Successfully Converted");
-                    case IOERROR -> System.out.println("An IOError Has Occurred");
+    private void showTasksStatus(FileConverter fileConverter){
+        for (CompletableFuture<String> task : fileConverter.getInitiatedFileConversions()){
+            try {
+                if (task.isDone()) {
+                    System.out.println(task.get());
+                } else {
+                    System.out.println("Not done yet");
                 }
-            } else {
-                System.out.println("Not done yet");
+            } catch (ExecutionException e){
+                System.out.println("Conversion ended with an unexpected error. Check the logs for more information");
+            } catch (InterruptedException e){
+                System.out.println("The conversion is occupied at the moment");
             }
         }
     }
@@ -120,6 +120,14 @@ public class EventLoop implements Runnable{
         }
     }
 
+    /**
+     * Calls the conversion command and some prompts
+     * @param sc The scanner which handler the user input
+     * @param fileConverter The FileConverter object which handler the conversion
+     * @param prompt1 Prompt for the first file path
+     * @param prompt2 Prompt for the second file path
+     * @param convertCommand The conversion command
+     */
     private void convert(Scanner sc, FileConverter fileConverter, String prompt1, String prompt2, ConvertCommand convertCommand){
         String file1, file2;
 
@@ -132,13 +140,18 @@ public class EventLoop implements Runnable{
         fileConverter.executeCommand(convertCommand, file1, file2);
     }
 
-    private void mainEventLoop(Scanner sc, FileConverter fileConverter){
+    /**
+     * Starts the main event loop
+     * @param sc The scanner which will handle the user input
+     * @param fileConverter The FileConverter object which will handle the conversion
+     */
+    private void mainEventLoop(Scanner sc, FileConverter fileConverter) throws CantLoadSettingsException {
         boolean anotherOne = true;
 
         System.out.println(helloMessage);
 
         while (anotherOne) {
-            try{
+            try {
                 System.out.print(prompt);
 
                 int userSelect = selectOption(sc);
@@ -159,23 +172,20 @@ public class EventLoop implements Runnable{
                     case 5 -> anotherOne = false;
                     default -> throw new InputMismatchException("Your pick bust be a number of one of the options!");
                 }
+            } catch (InputMismatchException e){
 
-            } catch (InputMismatchException e) {
-                System.out.println(e.getMessage());
-            } catch (ExecutionException | InterruptedException | CantLoadSettingsException e) {
-                throw new RuntimeException(e);
-            } finally {
-                if (!anotherOne) { sc.close(); };
             }
         }
     }
 
     @Override
     public void run() {
-        Scanner sc = new Scanner(System.in);
-        FileConverter fileConverter = new FileConverter();
-
-        mainEventLoop(sc, fileConverter);
+        try (Scanner sc = new Scanner(System.in)) {
+            FileConverter fileConverter = new FileConverter();
+            mainEventLoop(sc, fileConverter);
+        } catch (CantLoadSettingsException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
 
