@@ -1,9 +1,6 @@
 package com.EventLoop;
 
 import com.Exceptions.CantLoadSettingsException;
-import com.FileConverter.ConvertCommand;
-import com.FileConverter.ConvertFromCsvToJsonCommand;
-import com.FileConverter.ConvertFromJsonToCsvCommand;
 import com.FileConverter.FileConverter;
 
 import java.util.InputMismatchException;
@@ -12,6 +9,9 @@ import java.util.function.Function;
 
 public class EventLoop implements Runnable{
 
+    /**
+     * Simple function which asks for input and checks if it is number
+     */
     public Function<Scanner, Integer> selectOption = (Scanner sc) -> {
         String userSelect = sc.nextLine();
 

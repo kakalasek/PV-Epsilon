@@ -6,6 +6,10 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.function.Function;
 
+/**
+ * This is the loop for settings. It is similar to the main event loop, but it provides interface for changing the settings
+ * or getting back to the main event loop
+ */
 public class SettingsLoop {
 
     private final String helloMessage = """

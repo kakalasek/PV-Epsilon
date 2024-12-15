@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * This class  represents the settings of this app. It loads them from a special file called settings.json
+ */
 public class Settings {
 
     @JsonProperty private String csvDelimiter;

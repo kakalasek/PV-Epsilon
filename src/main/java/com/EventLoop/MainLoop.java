@@ -12,6 +12,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
+/**
+ * This is the main loop. It provides an interface for conversions, program shutdown, etc.
+ */
 public class MainLoop {
 
     private final String helloMessage = """
