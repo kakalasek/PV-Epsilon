@@ -91,9 +91,11 @@ public class FileHandler {
             bufferedWriter.write("");
 
             for(String[] record : inputData){
-                String recordAsString = Arrays.toString(record).replace(",", delimiter)
+                Arrays.parallelSetAll(record, (i) -> record[i].trim());
+                String recordAsString = Arrays.toString(record).replace(", ", delimiter)
                                                                 .replace("[", "")
                                                                 .replace("]", "");
+
                 recordAsString = recordAsString + "\n";
                 bufferedWriter.append(recordAsString);
             }
