@@ -30,8 +30,6 @@ public class EventLoop implements Runnable{
 
             mainLoop.startLoop();
 
-        } catch (CantLoadSettingsException e) {
-            System.out.println(e.getMessage());
         }
     }
 }

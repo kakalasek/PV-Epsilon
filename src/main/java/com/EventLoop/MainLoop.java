@@ -42,7 +42,7 @@ public class MainLoop {
     private final SettingsLoop settingsLoop;
     private final Function<Scanner, Integer> selectOption;
 
-    public MainLoop(Scanner sc, FileConverter fileConverter, Function<Scanner, Integer> selectOption) throws CantLoadSettingsException {
+    public MainLoop(Scanner sc, FileConverter fileConverter, Function<Scanner, Integer> selectOption){
         this.sc = sc;
         this.fileConverter = fileConverter;
         this.selectOption = selectOption;
@@ -92,7 +92,7 @@ public class MainLoop {
     /**
      * Starts the main event loop
      */
-    public void startLoop() {
+    public void startLoop(){
         boolean anotherOne = true;
 
         System.out.println(helloMessage);

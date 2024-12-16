@@ -1,6 +1,7 @@
 package com.EventLoop;
 
 import com.Exceptions.CantLoadSettingsException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -33,7 +34,7 @@ public class SettingsLoop {
     private final Function<Scanner, Integer> selectOption;
     private final Settings settings;
 
-    public SettingsLoop(Scanner sc, Function<Scanner, Integer> selectOption) throws CantLoadSettingsException {
+    public SettingsLoop(Scanner sc, Function<Scanner, Integer> selectOption) {
         this.sc = sc;
         this.selectOption = selectOption;
         this.settings = Settings.loadSettings();
@@ -42,7 +43,7 @@ public class SettingsLoop {
     /**
      * Works similar to the main event loop, but is used for settings
      */
-    public void startLoop() {
+    public void startLoop(){
         try {
             boolean anotherOne = true;
 
