@@ -11,6 +11,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
+import com.Logging.VerySimpleLogger;
+
 /**
  * This is the main loop. It provides an interface for conversions, program shutdown, etc.
  */
@@ -40,6 +42,7 @@ public class MainLoop {
     private final FileConverter fileConverter;
     private final SettingsLoop settingsLoop;
     private final Function<Scanner, Integer> selectOption;
+    private final VerySimpleLogger logger = new VerySimpleLogger();
 
     public MainLoop(Scanner sc, FileConverter fileConverter, Function<Scanner, Integer> selectOption){
         this.sc = sc;
@@ -61,8 +64,10 @@ public class MainLoop {
                     System.out.println("Not done yet");
                 }
             } catch (ExecutionException e){
+                logger.log(e.toString());
                 System.out.println("Conversion ended with an unexpected error. Check the logs for more information");
             } catch (InterruptedException e){
+                logger.log(e.toString());
                 System.out.println("The conversion is occupied at the moment");
             }
         }
@@ -118,8 +123,7 @@ public class MainLoop {
                     case 5 -> anotherOne = false;
                     default -> throw new InputMismatchException("Your pick bust be a number of one of the options!");
                 }
-            } catch (InputMismatchException _){
-
+            } catch (InputMismatchException e){
             }
         }
     }

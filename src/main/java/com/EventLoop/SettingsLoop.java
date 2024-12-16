@@ -62,7 +62,7 @@ public class SettingsLoop {
                 }
             }
         } catch (InputMismatchException e){
-            System.out.println(e.getMessage());
+
         }
     }
 

@@ -3,6 +3,7 @@ package com.FileConverter;
 import com.Exceptions.CsvReadException;
 import com.Exceptions.JsonHandlingException;
 import com.Exceptions.JsonWriteException;
+import com.Logging.VerySimpleLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -12,6 +13,8 @@ import com.utils.FileHandler;
 import java.util.ArrayList;
 
 public class ConvertFromCsvToJsonCommand implements ConvertCommand {
+
+    private final VerySimpleLogger logger = new VerySimpleLogger();
 
     /**
      * This method convert representation of csv data to a json String
@@ -50,6 +53,7 @@ public class ConvertFromCsvToJsonCommand implements ConvertCommand {
 
             FileHandler.writeJson(file2, jsonData);
         } catch (JsonHandlingException | CsvReadException | JsonWriteException e){
+            logger.log(e.toString());
             return e.getMessage();
         }
 

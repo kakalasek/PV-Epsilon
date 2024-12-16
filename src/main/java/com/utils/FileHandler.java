@@ -2,6 +2,7 @@ package com.utils;
 
 import com.EventLoop.Settings;
 import com.Exceptions.*;
+import com.Logging.VerySimpleLogger;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -13,6 +14,8 @@ import java.util.Arrays;
  * Special class which offers method to read and write a json or csv file
  */
 public class FileHandler {
+
+    private static final VerySimpleLogger logger = new VerySimpleLogger();
 
     /**
      * Reads a csv file.
@@ -34,6 +37,7 @@ public class FileHandler {
 
             return outputList;
         } catch (IOException e) {
+            logger.log(e.toString());
             throw new CsvReadException("There has been a problem reading the csv file", e);
         }
     }

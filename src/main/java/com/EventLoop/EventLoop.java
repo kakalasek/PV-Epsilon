@@ -28,7 +28,6 @@ public class EventLoop implements Runnable{
             MainLoop mainLoop = new MainLoop(sc, fileConverter, selectOption);
 
             mainLoop.startLoop();
-
         }
     }
 }
