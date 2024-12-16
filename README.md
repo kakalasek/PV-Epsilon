@@ -2,7 +2,15 @@ Description
 ===========
 A very simple program which can convert csv to json array.
 Possibly more formats will be supported. It uses a console
-based interface.
+based interface.        
+It was created primarily to showcase the use of asynchronous methods and cooperative multitasking, although the latter
+is not really present. The file conversions can be big and take a long time, so for smooth experience this program
+starts conversion on a different java virtual thread, thus asynchronously. Like this, you are able to start multiple 
+file conversions at once. You can look at their status. The list of statuses is ordered based on the time you started 
+the conversions.            
+I am purposefully using virtual threads, because, in theory, they kinda use cooperative multitasking in the background. 
+I was 2/3 into this project, when I realized, that asyncio in Python would be a much better example, so I at least 
+finished this.
 
 Supported file examples
 =======================
