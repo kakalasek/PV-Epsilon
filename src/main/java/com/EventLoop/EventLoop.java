@@ -1,6 +1,5 @@
 package com.EventLoop;
 
-import com.Exceptions.CantLoadSettingsException;
 import com.FileConverter.FileConverter;
 
 import java.util.InputMismatchException;

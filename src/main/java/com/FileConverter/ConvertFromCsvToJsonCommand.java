@@ -1,6 +1,5 @@
 package com.FileConverter;
 
-import com.Exceptions.CantLoadSettingsException;
 import com.Exceptions.CsvReadException;
 import com.Exceptions.JsonHandlingException;
 import com.Exceptions.JsonWriteException;
@@ -50,7 +49,7 @@ public class ConvertFromCsvToJsonCommand implements ConvertCommand {
             String jsonData = createJson(loadedCsvData);
 
             FileHandler.writeJson(file2, jsonData);
-        } catch (JsonHandlingException | CsvReadException | JsonWriteException | CantLoadSettingsException e){
+        } catch (JsonHandlingException | CsvReadException | JsonWriteException e){
             return e.getMessage();
         }
 

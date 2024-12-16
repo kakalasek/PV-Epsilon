@@ -1,6 +1,5 @@
 package com.FileConverter;
 
-import com.Exceptions.CantLoadSettingsException;
 import com.Exceptions.CsvWriteException;
 import com.Exceptions.JsonHandlingException;
 import com.Exceptions.JsonReadException;

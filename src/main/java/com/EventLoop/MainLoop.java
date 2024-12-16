@@ -1,6 +1,5 @@
 package com.EventLoop;
 
-import com.Exceptions.CantLoadSettingsException;
 import com.FileConverter.ConvertCommand;
 import com.FileConverter.ConvertFromCsvToJsonCommand;
 import com.FileConverter.ConvertFromJsonToCsvCommand;

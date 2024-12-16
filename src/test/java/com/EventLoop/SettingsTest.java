@@ -1,10 +1,32 @@
 package com.EventLoop;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
-public class SettingsTest extends TestCase {
+import java.lang.reflect.Field;
 
-    public void testLoadSettingsIsWithoutException(){
+import static org.junit.Assert.assertEquals;
 
+public class SettingsTest {
+
+    @Before
+    public void setup() throws NoSuchFieldException, IllegalAccessException {
+        Field instance = Settings.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(new Settings(), null);
+        instance.setAccessible(false);
+    }
+
+    @Test
+    public void testCreatingSettingsWorksFine(){
+        Settings settings = Settings.loadSettings();
+        assertEquals(",", settings.getCsvDelimiter());
+    }
+
+    @Test
+    public void testSettingsCsvDelimiterActuallySetsIt(){
+        Settings settings = Settings.loadSettings();
+        settings.setCsvDelimiter(";");
+        assertEquals(";", settings.getCsvDelimiter());
     }
 }
