@@ -19,11 +19,9 @@ public class FileHandler {
      * @param filePath Path to the csv file
      * @return An ArrayList object with String arrays as its elements. The first String array will contain the field names,
      * every other String array will represent one record inside the csv file.
-     * @throws CantLoadSettingsException This method need to know which delimiter to use in the csv file. If reading it from
-     * settings does not work, it throws this exception.
-     * @throws CsvReadException Get thrown if there is any problem reading the provided csv file
+     * @throws CsvReadException Gets thrown if there is any problem reading the provided csv file
      */
-    public static ArrayList<String[]> readCsv(String filePath) throws CantLoadSettingsException, CsvReadException {
+    public static ArrayList<String[]> readCsv(String filePath) throws CsvReadException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
             ArrayList<String[]> outputList = new ArrayList<>();
             String newLine;
@@ -67,8 +65,9 @@ public class FileHandler {
      */
     public static void writeJson(String filePath, String inputData) throws JsonWriteException {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
-            bufferedWriter.write(inputData);
+            bufferedWriter.write("");
 
+            bufferedWriter.write(inputData);
         } catch (IOException e){
             throw new JsonWriteException("There has been a problem writing the json to the file", e);
         }
@@ -80,10 +79,8 @@ public class FileHandler {
      * @param inputData The data to write. The ArrayList holds all the csv records represented as String arrays
      *                  The first ArrayList entry holds the csv field names, other entries hold the csv records
      * @throws CsvWriteException Is thrown if any problem with writing to the specified file appears
-     * @throws CantLoadSettingsException This method need to know which delimiter to use in the csv file. If reading it from
-     *                                   settings does not work, it throws this exception.
      */
-    public static void writeCsv(String filepath, ArrayList<String[]> inputData) throws CantLoadSettingsException, CsvWriteException {
+    public static void writeCsv(String filepath, ArrayList<String[]> inputData) throws CsvWriteException {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath))){
             Settings settings = Settings.loadSettings();
             String delimiter = settings.getCsvDelimiter();

@@ -1,5 +1,6 @@
 package com.EventLoop;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class SettingsTest {
 
-    @Before
+    @After
     public void setup() throws NoSuchFieldException, IllegalAccessException {
         Field instance = Settings.class.getDeclaredField("instance");
         instance.setAccessible(true);
@@ -18,13 +19,13 @@ public class SettingsTest {
     }
 
     @Test
-    public void testCreatingSettingsWorksFine(){
+    public void creatingSettingsWorksFine(){
         Settings settings = Settings.loadSettings();
         assertEquals(",", settings.getCsvDelimiter());
     }
 
     @Test
-    public void testSettingsCsvDelimiterActuallySetsIt(){
+    public void settingsCsvDelimiterActuallySetsIt(){
         Settings settings = Settings.loadSettings();
         settings.setCsvDelimiter(";");
         assertEquals(";", settings.getCsvDelimiter());

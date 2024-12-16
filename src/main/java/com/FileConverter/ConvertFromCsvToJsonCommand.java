@@ -36,7 +36,7 @@ public class ConvertFromCsvToJsonCommand implements ConvertCommand {
             }
 
             return objectMapper.writeValueAsString(arrayNode);
-        } catch (JsonProcessingException e){
+        } catch (Exception e){
             throw new JsonHandlingException("There has been a problem when creating the new json file", e);
         }
     }

@@ -57,7 +57,7 @@ public class ConvertFromJsonToCsvCommand implements ConvertCommand {
             }
 
             return outputList;
-        } catch (JsonProcessingException | IndexOutOfBoundsException e){
+        } catch (Exception e){
             throw new JsonHandlingException("There has been a problem when creating the new csv file", e);
         }
     }
@@ -71,7 +71,7 @@ public class ConvertFromJsonToCsvCommand implements ConvertCommand {
 
             FileHandler.writeCsv(file2, csvData);
 
-        } catch (JsonHandlingException | CantLoadSettingsException | CsvWriteException | JsonReadException e){
+        } catch (JsonHandlingException | CsvWriteException | JsonReadException e){
             return e.getMessage();
         }
 
