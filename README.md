@@ -10,7 +10,10 @@ file conversions at once. You can look at their status. The list of statuses is 
 the conversions.            
 I am purposefully using virtual threads, because, in theory, they kinda use cooperative multitasking in the background. 
 I was 2/3 into this project, when I realized, that asyncio in Python would be a much better example, so I at least 
-finished this.
+finished this.          
+When entering file paths, I strongly advice to use absolute paths, since I am unsure if the underlying functions work 
+with relative ones and I haven't had time to test it.           
+Also, this program is not tested on Windows, because feck Windows, that why. Use Unix.
 
 Supported file examples
 =======================
