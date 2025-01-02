@@ -15,6 +15,7 @@ When entering file paths, I strongly advice to use absolute paths, since I am un
 with relative ones and I haven't had time to test it.           
 Also, this program is not tested on Windows, because feck Windows, that why. Use Unix.
 
+
 Supported file examples
 =======================
 
