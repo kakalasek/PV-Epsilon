@@ -19,6 +19,8 @@ Also, this program is not tested on Windows, because feck Windows, that why. Use
 Supported file examples
 =======================
 
+The default CSV delimiter is set to "," (a comma). You can change it in settings. Note that if you change it, the change will only last until you shut down the program.
+
 Csv
 ---
 
