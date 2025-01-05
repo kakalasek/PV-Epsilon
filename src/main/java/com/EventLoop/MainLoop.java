@@ -124,6 +124,7 @@ public class MainLoop {
                     default -> throw new InputMismatchException("Your pick bust be a number of one of the options!");
                 }
             } catch (InputMismatchException e){
+                System.out.println(e.getMessage());
             }
         }
     }
